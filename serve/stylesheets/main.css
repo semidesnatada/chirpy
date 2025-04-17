@@ -1,0 +1,176 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Body & Fonts */
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f8fa;
+    color: #14171a;
+    line-height: 1.5;
+  }
+  
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-right: 1px solid #e6ecf0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+  
+  .sidebar a {
+    display: block;
+    padding: 10px 0;
+    color: #1da1f2;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .sidebar a:hover {
+    background-color: #e8f5fe;
+    border-radius: 25px;
+    padding-left: 15px;
+  }
+  
+  /* Feed */
+  .feed {
+    flex: 1;
+    max-width: 600px;
+    border-left: 1px solid #e6ecf0;
+    border-right: 1px solid #e6ecf0;
+    background-color: #ffffff;
+  }
+  
+  /* Header */
+  .feed-header {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    z-index: 10;
+    padding: 15px;
+    border-bottom: 1px solid #e6ecf0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Chirp Box */
+  .chirp-box {
+    padding: 15px;
+    border-bottom: 1px solid #e6ecf0;
+  }
+  
+  .chirp-box textarea {
+    /* width: 100%;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f5f8fa; */
+    flex: 1;
+    margin: 0;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f5f8fa;
+    resize: none;
+  }
+  
+  .chirp-box button {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 25px;
+    font-weight: bold;
+    /* margin-top: 10px; */
+    height: fit-content;
+    cursor: pointer;
+    /* float: none; Remove float since we're using flex now */
+  }
+  
+  .chirp-box button:hover {
+    background-color: #1991da;
+  }
+
+  .chirp-box form {
+    display: flex;
+    align-items: flex-start;
+    /* flex-direction: column; */
+    gap: 10px;
+  }
+  
+  .chirp-box-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  
+  
+  /* Chirp */
+  .chirp {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #e6ecf0;
+  }
+  
+  .chirp img.avatar {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+  }
+  
+  .chirp-content {
+    flex: 1;
+  }
+  
+  .chirp-content .username {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  
+  .chirp-content .handle {
+    color: gray;
+    font-size: 14px;
+  }
+  
+  .chirp-content .text {
+    margin-top: 5px;
+    font-size: 15px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      padding: 0;
+    }
+  
+    .sidebar {
+      display: none;
+    }
+  
+    .feed {
+      width: 100%;
+      border: none;
+    }
+  }
+  

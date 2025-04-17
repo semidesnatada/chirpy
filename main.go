@@ -1,26 +1,22 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"net/http"
 
 	_ "github.com/lib/pq"
-	"github.com/semidesnatada/chirpy/internal/database"
 )
 
 func main() {
 
-	s := database.CreateState()
+	apiCfg := createState()
 
-	user, uErr := s.DB.CreateUser(context.Background(), "chicken@beans.com")
-	if uErr == nil {
-		fmt.Println(user)
-	} else {
-		fmt.Println(uErr.Error())
-	}
+	// user, uErr := apiCfg.DB.CreateUser(context.Background(), "chicken@beans.com")
+	// if uErr == nil {
+	// 	fmt.Println(user)
+	// } else {
+	// 	fmt.Println(uErr.Error())
+	// }
 
-	apiCfg := apiConfig{}
 	serveHandler := http.NewServeMux()
 
 	//app namespace
@@ -28,7 +24,12 @@ func main() {
 	
 	//api namespace
 	serveHandler.HandleFunc("GET /api/healthz", healthzHandler)
-	serveHandler.HandleFunc("POST /api/validate_chirp", chirpValidationHandler)
+	// serveHandler.HandleFunc("POST /api/validate_chirp", chirpValidationHandler)
+	serveHandler.HandleFunc("POST /api/chirps", apiCfg.chirpsCreationHandler)
+	serveHandler.HandleFunc("POST /api/users", apiCfg.usersCreationHandler)
+	serveHandler.HandleFunc("GET /api/chirps", apiCfg.chirpsGetHandler)
+	serveHandler.HandleFunc("GET /api/chirps/{chirpID}", apiCfg.chirpsGetSingleHandler)
+	serveHandler.HandleFunc("POST /api/login", apiCfg.loginHandler)
 
 	//admin namespace
 	serveHandler.HandleFunc("GET /admin/metrics", apiCfg.metricsHandler)

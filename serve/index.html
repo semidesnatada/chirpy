@@ -1,8 +1,76 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Chirpy</title>
+    <link rel="stylesheet" href="/app/stylesheets/main.css">
+</head>
 
 <body>
-    <h1>Welcome to Chirpy</h1>
-    <p>My name is beans on toast</p>
+
+
+        <div class="container">
+            <h1>Welcome to Chirpy</h1>
+        </div>
+            <div class="container">
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <a href="#">Home</a>
+            <a href="#">Explore</a>
+            <a href="#">Notifications</a>
+            <a href="#">Messages</a>
+            <a href="#">Bookmarks</a>
+            <a href="#">Profile</a>
+            <a href="#">More</a>
+          </div>
+      
+          <!-- Feed -->
+          <div class="feed">
+      
+            <!-- Header -->
+            <div class="feed-header">
+              Home
+            </div>
+      
+            <!-- Chirp Box -->
+            <div class="chirp-box">
+                <form>
+                    <textarea rows="2" placeholder="What's happening?"></textarea>
+                    <button type="submit">Chirp</button>
+                </form>
+            </div>
+              
+      
+            <!-- Chirps -->
+            <div class="chirp">
+              <img class="avatar" src="https://picsum.photos/200" alt="User avatar">
+              <div class="chirp-content">
+                <span class="username">John Doe</span>
+                <span class="handle">@johndoe</span>
+                <div class="text">
+                  Just setting up my BlueSky clone. #firstchirp
+                </div>
+              </div>
+            </div>
+      
+            <div class="chirp">
+              <img class="avatar" src="https://picsum.photos/200" alt="User avatar">
+              <div class="chirp-content">
+                <span class="username">Jane Smith</span>
+                <span class="handle">@janesmith</span>
+                <div class="text">
+                  Loving this new layout! 🔥
+                </div>
+              </div>
+            </div>
+      
+          </div>
+        </div>
+      
+
+
 </body>
 
 </html>

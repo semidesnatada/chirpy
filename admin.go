@@ -3,18 +3,16 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"sync/atomic"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
-
-type apiConfig struct {
-	fileserverHits atomic.Int32
-}
 
 func (cfg *apiConfig) metricsHandler(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 
 	// w.Write([]byte(fmt.Sprintf("Hits: %d",cfg.fileserverHits.Load())))
 	page := []byte(fmt.Sprintf(
@@ -30,9 +28,21 @@ func (cfg *apiConfig) metricsHandler(w http.ResponseWriter, req *http.Request) {
 
 func (cfg *apiConfig) resetMetricsHandler(w http.ResponseWriter, req *http.Request) {
 
-	cfg.fileserverHits = atomic.Int32{}
+	godotenv.Load()
+	PLATFORM := os.Getenv("PLATFORM")
+	if PLATFORM != "dev" {
+		// fmt.Println("DB_URL must be set")
+		// os.Exit(1)
+		respondWithError(w, http.StatusForbidden, "cannot access this endpoint in production", nil)
+		return
+	}
+
+	cfg.DB.DeleteAllUsers(req.Context())
+
+	cfg.fileserverHits.Store(0)
+	
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 
 	w.Write([]byte(fmt.Sprintf("Hits: %d",cfg.fileserverHits.Load())))
 }

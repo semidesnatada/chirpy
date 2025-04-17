@@ -1,1 +1,1 @@
-cd "sql/schema" && goose postgres "postgres://seanlowery:@localhost:5432/chirpy" down
+cd "sql/schema" && goose postgres "postgres://seanlowery:@localhost:5432/chirpy" down-to 0
