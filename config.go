@@ -13,6 +13,7 @@ import (
 type apiConfig struct {
 	fileserverHits atomic.Int32
 	DB *database.Queries
+	JWTSecret string
 }
 
 func createState() apiConfig {
@@ -32,9 +33,16 @@ func createState() apiConfig {
 	
 	dbQueries := database.New(db)
 
+	JWT_secret := os.Getenv("JWT_SECRET")
+	if JWT_secret == "" {
+		fmt.Println("JWT_SECRET must be set")
+		os.Exit(1)
+	}
+
 	return apiConfig{
 		fileserverHits: atomic.Int32{},
 		DB: dbQueries,
+		JWTSecret: JWT_secret,
 	}
 
 }

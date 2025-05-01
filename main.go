@@ -30,6 +30,8 @@ func main() {
 	serveHandler.HandleFunc("GET /api/chirps", apiCfg.chirpsGetHandler)
 	serveHandler.HandleFunc("GET /api/chirps/{chirpID}", apiCfg.chirpsGetSingleHandler)
 	serveHandler.HandleFunc("POST /api/login", apiCfg.loginHandler)
+	serveHandler.HandleFunc("POST /api/refresh", apiCfg.refreshHandler)
+	serveHandler.HandleFunc("POST /api/revoke", apiCfg.revokeHandler)
 
 	//admin namespace
 	serveHandler.HandleFunc("GET /admin/metrics", apiCfg.metricsHandler)

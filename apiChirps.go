@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/semidesnatada/chirpy/internal/auth"
 	"github.com/semidesnatada/chirpy/internal/database"
 )
 
@@ -20,7 +21,7 @@ func (cfg *apiConfig) chirpsCreationHandler(w http.ResponseWriter, req *http.Req
 
 	type requestValues struct {
 		Body string `json:"body"`
-		UserID uuid.UUID `json:"user_id"`
+		// UserID uuid.UUID `json:"user_id"`
 	}
 	type responseValues struct {
 		Id uuid.UUID `json:"id"`
@@ -43,12 +44,20 @@ func (cfg *apiConfig) chirpsCreationHandler(w http.ResponseWriter, req *http.Req
 	}
 
 	cleanedBody := getCleanBody(reqParams.Body)
+	token, tErr := auth.GetBearerToken(req.Header)
+	if tErr != nil {
+		respondWithError(w, http.StatusUnauthorized, "could not authorise this chirp", tErr)
+	}
+	uId, pErr := auth.ValidateJWT(token, cfg.JWTSecret)
+	if pErr != nil {
+		respondWithError(w, http.StatusUnauthorized, "could not parse this authorisation token", pErr)
+	}
 
 	chirp, creErr := cfg.DB.CreateChirp(
 		req.Context(),
 		database.CreateChirpParams{
 			Body: cleanedBody,
-			UserID: reqParams.UserID,
+			UserID: uId,
 		},
 	)
 	if creErr != nil {
