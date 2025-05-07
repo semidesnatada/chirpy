@@ -143,7 +143,7 @@ func (cfg *apiConfig) chirpsGetSingleHandler(w http.ResponseWriter, req *http.Re
 
 	chirp, cErr := cfg.DB.GetSingleChirps(req.Context(), chirpID)
 	if cErr != nil {
-		respondWithError(w, http.StatusInternalServerError, "couldn't get that chirp from the db", cErr)
+		respondWithError(w, http.StatusNotFound, "couldn't get that chirp from the db", cErr)
 		return
 	}
 
@@ -156,4 +156,55 @@ func (cfg *apiConfig) chirpsGetSingleHandler(w http.ResponseWriter, req *http.Re
 			UserId: chirp.UserID,
 		},
 	)
+}
+
+func (cfg *apiConfig) chirpsDeleteSingleHandler(w http.ResponseWriter, req *http.Request) {
+
+	accessToken, err := auth.GetBearerToken(req.Header)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "not able to extract authorization token", err)
+		return
+	}
+
+	userId, authErr := auth.ValidateJWT(accessToken, cfg.JWTSecret)
+	if authErr != nil {
+		respondWithError(w, http.StatusUnauthorized, "not authorized", authErr)
+		return
+	}
+
+	chirpIDstring := req.PathValue("chirpID")
+	if chirpIDstring == "" {
+		respondWithError(w, http.StatusBadRequest, "that's not a valid chirp ID", errors.New("couldn't identify chirp ID from url path"))
+		return
+	}
+
+	chirpID, parsErr := uuid.Parse(chirpIDstring)
+	if parsErr != nil {
+		respondWithError(w, http.StatusBadRequest, "that's not a valid chirp ID", errors.New("couldn't parse the chirp ID"))
+		return
+	}
+
+	ch, chErr := cfg.DB.GetSingleChirps(req.Context(), chirpID)
+	if chErr != nil {
+		respondWithError(w, http.StatusNotFound, "couldn't identify this chirp at all", chErr)
+		return
+	}
+	if ch.UserID != userId {
+		respondWithError(w, http.StatusForbidden, "you can't delete someone else's chirp", errors.New("no no not allowed"))
+		return
+	}
+
+	cErr := cfg.DB.DeleteSingleChirps(req.Context(),
+	database.DeleteSingleChirpsParams{
+		ID: chirpID,
+		UserID: userId,
+	})
+
+	if cErr != nil {
+		respondWithError(w, http.StatusNotFound, "error deleting this chirp", cErr)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
 }

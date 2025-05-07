@@ -50,6 +50,21 @@ func (q *Queries) DeleteAllChirps(ctx context.Context) error {
 	return err
 }
 
+const deleteSingleChirps = `-- name: DeleteSingleChirps :exec
+DELETE FROM chirps
+WHERE id = $1 AND user_id = $2
+`
+
+type DeleteSingleChirpsParams struct {
+	ID     uuid.UUID
+	UserID uuid.UUID
+}
+
+func (q *Queries) DeleteSingleChirps(ctx context.Context, arg DeleteSingleChirpsParams) error {
+	_, err := q.db.ExecContext(ctx, deleteSingleChirps, arg.ID, arg.UserID)
+	return err
+}
+
 const getAllChirps = `-- name: GetAllChirps :many
 SELECT id, created_at, updated_at, body, user_id
 FROM chirps

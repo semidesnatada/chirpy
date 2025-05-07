@@ -26,12 +26,19 @@ func main() {
 	serveHandler.HandleFunc("GET /api/healthz", healthzHandler)
 	// serveHandler.HandleFunc("POST /api/validate_chirp", chirpValidationHandler)
 	serveHandler.HandleFunc("POST /api/chirps", apiCfg.chirpsCreationHandler)
-	serveHandler.HandleFunc("POST /api/users", apiCfg.usersCreationHandler)
 	serveHandler.HandleFunc("GET /api/chirps", apiCfg.chirpsGetHandler)
 	serveHandler.HandleFunc("GET /api/chirps/{chirpID}", apiCfg.chirpsGetSingleHandler)
+	serveHandler.HandleFunc("DELETE /api/chirps/{chirpID}", apiCfg.chirpsDeleteSingleHandler)
+
+	serveHandler.HandleFunc("POST /api/users", apiCfg.usersCreationHandler)
+	serveHandler.HandleFunc("PUT /api/users", apiCfg.usersUpdateHandler)
+
 	serveHandler.HandleFunc("POST /api/login", apiCfg.loginHandler)
+
 	serveHandler.HandleFunc("POST /api/refresh", apiCfg.refreshHandler)
+	
 	serveHandler.HandleFunc("POST /api/revoke", apiCfg.revokeHandler)
+
 
 	//admin namespace
 	serveHandler.HandleFunc("GET /admin/metrics", apiCfg.metricsHandler)
