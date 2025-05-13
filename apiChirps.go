@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -98,10 +99,36 @@ func (cfg *apiConfig) chirpsGetHandler(w http.ResponseWriter, req *http.Request)
 	}
 	type responseValues []responseItem
 
-	chirps, cErr := cfg.DB.GetAllChirps(req.Context())
-	if cErr != nil {
-		respondWithError(w, http.StatusInternalServerError, "couldn't get all the chirps for you", cErr)
-		return
+	s := req.URL.Query().Get("author_id")
+
+	var chirps []database.Chirp
+
+	if s == "" {
+		chirpsResult, cErr := cfg.DB.GetAllChirps(req.Context())
+		if cErr != nil {
+			respondWithError(w, http.StatusInternalServerError, "couldn't get all the chirps for you", cErr)
+			return
+		}
+		chirps = chirpsResult
+	} else {
+		sID, parsErr := uuid.Parse(s)
+		if parsErr != nil {
+			respondWithError(w, http.StatusBadRequest, "couldn't parse an id from this search query", errors.New("can't process this request"))
+			return
+		}
+		chirpsResult, cErr := cfg.DB.GetAllChirpsByAuthor(req.Context(), sID)
+		if cErr != nil {
+			respondWithError(w, http.StatusInternalServerError, "couldn't get all the chirps for you", cErr)
+			return
+		}
+		chirps = chirpsResult
+	}
+
+	sortDirection := req.URL.Query().Get("sort")
+	if sortDirection == "asc" {
+		sort.Slice(chirps, func(i, j int) bool { return chirps[i].CreatedAt.Before(chirps[j].CreatedAt) })
+	} else if sortDirection == "desc" {
+		sort.Slice(chirps, func(i, j int) bool { return chirps[j].CreatedAt.Before(chirps[i].CreatedAt) })
 	}
 
 	responsePayload := make(responseValues, len(chirps))

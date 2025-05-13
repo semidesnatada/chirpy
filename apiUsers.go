@@ -22,6 +22,7 @@ func (cfg *apiConfig) usersCreationHandler(w http.ResponseWriter, req *http.Requ
 		CreatedAt time.Time `json:"created_at"`
 		UpdatedAt time.Time `json:"updated_at"`
 		Email string `json:"email"`
+		IsChirpyRed bool `json:"is_chirpy_red"`
 	}
 
 	decoder := json.NewDecoder(req.Body)
@@ -54,6 +55,7 @@ func (cfg *apiConfig) usersCreationHandler(w http.ResponseWriter, req *http.Requ
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 		Email: u.Email,
+		IsChirpyRed: u.IsChirpyRed,
 	})
 }
 
@@ -80,6 +82,7 @@ func (cfg *apiConfig) usersUpdateHandler(w http.ResponseWriter, req *http.Reques
 		CreatedAt time.Time `json:"created_at"`
 		UpdatedAt time.Time `json:"updated_at"`
 		Email string `json:"email"`
+		IsChirpyRed bool `json:"is_chirpy_red"`
 	}
 
 	decoder := json.NewDecoder(req.Body)
@@ -113,5 +116,6 @@ func (cfg *apiConfig) usersUpdateHandler(w http.ResponseWriter, req *http.Reques
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 		Email: u.Email,
+		IsChirpyRed: u.IsChirpyRed,
 	})
 }

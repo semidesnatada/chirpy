@@ -14,6 +14,7 @@ type apiConfig struct {
 	fileserverHits atomic.Int32
 	DB *database.Queries
 	JWTSecret string
+	PolkaSecret string
 }
 
 func createState() apiConfig {
@@ -39,10 +40,17 @@ func createState() apiConfig {
 		os.Exit(1)
 	}
 
+	Polka_secret := os.Getenv("POLKA_KEY")
+	if Polka_secret == "" {
+		fmt.Println("POLKA_KEY must be set")
+		os.Exit(1)
+	}
+
 	return apiConfig{
 		fileserverHits: atomic.Int32{},
 		DB: dbQueries,
 		JWTSecret: JWT_secret,
+		PolkaSecret: Polka_secret,
 	}
 
 }

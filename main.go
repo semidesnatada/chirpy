@@ -39,6 +39,7 @@ func main() {
 	
 	serveHandler.HandleFunc("POST /api/revoke", apiCfg.revokeHandler)
 
+	serveHandler.HandleFunc("POST /api/polka/webhooks", apiCfg.polkaWebhookHandler)
 
 	//admin namespace
 	serveHandler.HandleFunc("GET /admin/metrics", apiCfg.metricsHandler)
